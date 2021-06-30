@@ -1,0 +1,41 @@
+project_name: thermite
+before:
+  hooks:
+    - go mod tidy
+    - go mod vendor
+builds:
+  - env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s
+      - -w
+    goos:
+      - darwin
+      - linux
+      - windows
+archives:
+  - builds:
+    - thermite
+brews:
+  - tap:
+      owner: dollarshaveclub
+      name: "homebrew-public"
+    folder: Formula
+    homepage: "https://github.com/dollarshaveclub/thermite"
+    description: "Removes old Amazon Elastic Container Registry images that are not deployed in a Kubernetes cluster"
+    license: "Apache-2.0"
+    skip_upload: true # TODO: Enable after first public release
+dockers:
+  -
+    image_templates:
+    - "dollarshaveclub/{{.ProjectName}}:{{.Tag}}"
+    - "dollarshaveclub/{{.ProjectName}}:v{{.Major}}"
+    - "dollarshaveclub/{{.ProjectName}}:v{{.Major}}.{{.Minor}}"
+    - "dollarshaveclub/{{.ProjectName}}:latest"
+    extra_files:
+    - cmd/
+    - pkg/
+    - vendor/
+    - go.mod
+    - go.sum
+    - main.go

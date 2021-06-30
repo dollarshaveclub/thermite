@@ -1,0 +1,85 @@
+awsRegion: "us-east-1"
+periodTagKey: "thermite:prune-period"
+schedule: "* 0 * * *"
+removeImages: false
+immediateRun: false
+
+datadog:
+  host: "localhost"
+  service: "thermite"
+  env: "local"
+  #version: ""
+  apm:
+    enabled: false
+    port: 8126
+  statsd:
+    enabled: false
+    port: 8125
+    namespace: "thermite"
+    tags: []
+
+secret:
+  enabled: false
+  name: "credentials"
+  
+vaultInjector:
+  enabled: false
+  name: "credentials"
+  role: ""
+  path: ""
+  authPath: "auth/kubernetes"
+  keys:
+    awsAccessKeyID: "aws_access_key_id"
+    awsSecretAccessKey: "aws_secret_access_key"
+
+clusterRole:
+  create: false
+  name: ""
+
+clusterRoleBinding:
+  create: false
+  name: ""
+
+image:
+  repository: dollarshaveclub/thermite
+  pullPolicy: IfNotPresent
+  tag: "0.0.16"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+  namespace: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 100
+
+resources: {}
+
+#resources:
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128M
+
+#nodeSelector: {}
+
+#tolerations: []
+
+#affinity: {}
