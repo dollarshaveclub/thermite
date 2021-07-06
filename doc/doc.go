@@ -17,6 +17,9 @@ const fm = `Thermite
 
 	go get github.com/dollarshaveclub/thermite
 
+	brew tap dollarshaveclub/thermite
+
+	docker pull dollarshaveclub/thermite
 `
 
 func main() {

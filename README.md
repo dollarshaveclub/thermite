@@ -6,6 +6,9 @@ Thermite
 
 	go get github.com/dollarshaveclub/thermite
 
+	brew tap dollarshaveclub/thermite
+
+	docker pull dollarshaveclub/thermite
 ## thermite
 
 Remove old and undeployed Amazon Elastic Container Registry images
