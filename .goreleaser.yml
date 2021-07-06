@@ -23,8 +23,7 @@ brews:
     folder: Formula
     homepage: "https://github.com/dollarshaveclub/thermite"
     description: "Removes old Amazon Elastic Container Registry images that are not deployed in a Kubernetes cluster"
-    license: "Apache-2.0"
-    skip_upload: true # TODO: Enable after first public release
+    license: "MIT"
 dockers:
   -
     image_templates:
