@@ -17,7 +17,8 @@ const fm = `Thermite
 
 	go get github.com/dollarshaveclub/thermite
 
-	brew tap dollarshaveclub/thermite
+	brew tap dollarshaveclub/homebrew-public
+	brew install thermite
 
 	docker pull dollarshaveclub/thermite
 `
