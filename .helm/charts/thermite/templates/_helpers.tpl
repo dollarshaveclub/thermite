@@ -165,9 +165,9 @@ spec:
           {{- end }}
           {{- with .Values.secret }}
           {{- if .enabled }}
-          volumeMounts:
-          - name: "credentials"
-            mountPath: "/etc/aws-shared-credentials"
+          envFrom:
+          - secretRef:
+              name: {{ .name | quote }}
           {{- end }}
           {{- end }}
           {{- with .Values.resources }}
@@ -178,15 +178,6 @@ spec:
           securityContext:
             {{- toYaml .| nindent 16 }}
           {{- end }}
-      {{- with .Values.secret }}
-      {{- if .enabled }}
-      volumes:
-        - name: "credentials"
-          secret:
-            secretName: {{ .name | quote }}
-            defaultMode: 0400
-      {{- end }}
-      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

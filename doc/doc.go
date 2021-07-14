@@ -21,6 +21,7 @@ const fm = `Thermite
 	brew install thermite
 
 	docker pull dollarshaveclub/thermite
+
 `
 
 func main() {
