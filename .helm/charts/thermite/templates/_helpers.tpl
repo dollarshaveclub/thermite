@@ -165,9 +165,16 @@ spec:
           {{- end }}
           {{- with .Values.secret }}
           {{- if .enabled }}
-          envFrom:
-          - secretRef:
-              name: {{ .name | quote }}
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom: 
+              secretKeyRef:
+                name: {{ .name | quote }}
+                key: {{ .keys.awsAccessKeyID | quote }}
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .name | quote }}
+                key: {{ .keys.awsSecretAccessKey | quote}}
           {{- end }}
           {{- end }}
           {{- with .Values.resources }}
