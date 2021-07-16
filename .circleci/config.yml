@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    filters:
+      branches:
+        ignore: gh-pages
     docker:
       - image: circleci/golang:1.16
     working_directory: /go/src/github.com/dollarshaveclub/thermite
@@ -8,11 +11,15 @@ jobs:
       - checkout
       - run: go build -v ./...
   test:
+    filters:
+      branches:
+        ignore: gh-pages
     docker:
       - image: circleci/golang:1.16
     working_directory: /go/src/github.com/dollarshaveclub/thermite
     steps:
       - checkout
+      - run: go fmt ./...
       - run: go vet -v ./...
       - run: go test -v ./...
 workflows:
