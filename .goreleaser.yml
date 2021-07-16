@@ -1,8 +1,18 @@
+# TODO: Document requirements for running goreleaser
 project_name: thermite
 before:
   hooks:
+    - go get -u ./...
     - go mod tidy
     - go mod vendor
+    - go build ./...
+    - go fmt ./...
+    - go vet ./...
+    - go test ./...
+    - go run doc/doc.go
+    - helm package charts/thermite --destination=.cr-release-packages
+    - cr upload --git-repo=helm-charts-public --owner dollarshaveclub
+    - cr index --charts-repo=https://dollarshaveclub.github.io/helm-charts-public/ --git-repo helm-charts-public --owner dollarshaveclub --push
 builds:
   - env:
       - CGO_ENABLED=0

@@ -61,28 +61,13 @@ serviceAccount:
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 100
 
 resources: {}
 
-#resources:
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128M
+nodeSelector: {}
 
-#nodeSelector: {}
+tolerations: []
 
-#tolerations: []
-
-#affinity: {}
+affinity: {}
