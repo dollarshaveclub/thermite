@@ -2,7 +2,6 @@
 project_name: thermite
 before:
   hooks:
-    - go get -u ./...
     - go mod tidy
     - go mod vendor
     - go build ./...

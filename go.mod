@@ -2,8 +2,6 @@ module github.com/dollarshaveclub/thermite
 
 go 1.16
 
-replace k8s.io/client-go => k8s.io/client-go v0.20.0
-
 require (
 	cloud.google.com/go v0.81.0 // indirect
 	github.com/Azure/go-autorest/autorest v0.11.18 // indirect
