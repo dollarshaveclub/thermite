@@ -46,7 +46,7 @@ clusterRoleBinding:
 image:
   repository: dollarshaveclub/thermite
   pullPolicy: IfNotPresent
-  tag: "0.0.18"
+  tag: "0.0.19"
 
 imagePullSecrets: []
 nameOverride: ""
