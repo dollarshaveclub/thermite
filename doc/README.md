@@ -24,4 +24,3 @@ Thermite
     helm repo add dollarshaveclub https://dollarshaveclub.github.io/helm-charts-public
 	helm repo update
 	helm install my-release dollarshaveclub/thermite
-

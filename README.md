@@ -25,7 +25,6 @@ Thermite
 	helm repo update
 	helm install my-release dollarshaveclub/thermite
 
-
 ## thermite
 
 Remove old and undeployed Amazon Elastic Container Registry images
