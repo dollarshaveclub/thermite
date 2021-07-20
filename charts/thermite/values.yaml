@@ -8,7 +8,6 @@ datadog:
   host: "localhost"
   service: "thermite"
   env: "local"
-  #version: ""
   apm:
     enabled: false
     port: 8126

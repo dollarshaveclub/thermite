@@ -1,6 +1,6 @@
 apiVersion: v2
 name: thermite
-version: 0.1.5
+version: 0.1.6
 description: Removes old and undeployed Amazon Elastic Container Registry images
 sources:
   - https://github.com/dollarshaveclub/thermite
