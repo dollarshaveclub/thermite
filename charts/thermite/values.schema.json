@@ -1,0 +1,269 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "Values",
+    "type": "object",
+    "properties": {
+      "awsRegion": {
+        "description": "AWS Region to send requests to",
+        "type": "string",
+        "default": "us-east-1"
+      },
+      "periodTagKey": {
+        "description": "AWS resource tag to check for prune period",
+        "type": "string",
+        "default": "thermite:prune-period"
+      },
+      "schedule": {
+        "description": "Schedule for running Thermite job in Cron format",
+        "type": "string",
+        "default": "* 0 * * *"
+      },
+      "removeImages": {
+        "description": "Enables removal of eligible images from ECR",
+        "type": "boolean",
+        "default": false
+      },
+      "immediateRun": {
+        "description": "Runs Thermite job immediately after chart installation",
+        "type": "boolean",
+        "default": false
+      },
+      "datadog": {
+        "description": "Datadog monitoring",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "Datadog Agent hostname",
+            "type": "string",
+            "default": "localhost"
+          },
+          "service": {
+            "description": "Datadog service tag to add to telemetry",
+            "type": "string",
+            "default": "thermite"
+          },
+          "env": {
+            "description": "Datadog env tag to add to telemetry",
+            "type": "string",
+            "default": "local"
+          },
+          "version": {
+            "description": "Datadog version tag to add to telemetry",
+            "type": "string"
+          },
+          "apm": {
+            "description": "Datadog APM",
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "description": "Enables sending traces and profiles to Datadog Agent",
+                "type": "boolean",
+                "default": false
+              },
+              "port": {
+                "description": "Datadog Agent APM port",
+                "type": "integer",
+                "default": 8126
+              }
+            }
+          },
+          "statsd": {
+            "description": "Datadog metrics",
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "description": "Enables sending metrics to Datadog Agent",
+                "type": "boolean",
+                "default": false
+              },
+              "port": {
+                "description": "Datadog Agent statsd port",
+                "type": "integer",
+                "default": 8125
+              },
+              "namespace": {
+                "description": "statsd namespace to add to metrics",
+                "type": "string",
+                "default": "thermite"
+              },
+              "tags": {
+                "description": "List of statsd tags to add to metrics",
+                "type": "array",
+                "default": []
+              }
+            }
+          }
+        }
+      },
+      "secret": {
+        "description": "Kubernetes Secret for AWS credentials",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "description": "Enables using Kubernetes Secret for AWS credentials",
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "description": "Name of secret storing AWS credentials",
+            "type": "string",
+            "default": "credentials"
+          },
+          "keys": {
+            "description": "Secret key names for AWS access keys",
+            "type": "object",
+            "properties": {
+              "awsAccessKeyID": {
+                "description": "Key name for AWS access key ID",
+                "type": "string",
+                "default": "AWS_ACCESS_KEY_ID"
+              },
+              "awsSecretAccessKey": {
+                "description": "Key name for AWS secret access key",
+                "type": "string",
+                "default": "AWS_SECRET_ACCESS_KEY"
+              }
+            }
+          }
+        }
+      },
+      "vaultInjector": {
+        "description": "Vault Agent injector for AWS credentials",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "description": "Enables using Vault Agent injector for AWS credentials",
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "description": "Filename of rendered secret",
+            "type": "string",
+            "default": "credentials"
+          },
+          "keys": {
+            "description": "Secret key names for AWS access keys",
+            "type": "object",
+            "properties": {
+              "awsAccessKeyID": {
+                "description": "Key name for AWS access key ID",
+                "type": "string",
+                "default": "aws_access_key_id"
+              },
+              "awsSecretAccessKey": {
+                "description": "Key name for AWS secret access key",
+                "type": "string",
+                "default": "aws_secret_access_key"
+              }
+            }
+          }
+        }
+      },
+      "clusterRole": {
+        "description": "Kubernetes ClusterRole",
+        "type": "object",
+        "properties": {
+          "create": {
+            "description": "Enables creation of Kubernetes ClusterRole if it does not exist",
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "description": "Kubernetes ClusterRole name",
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "clusterRoleBinding": {
+        "description": "Kubernetes ClusterRoleBinding",
+        "type": "object",
+        "properties": {
+          "create": {
+            "description": "Enables creation of Kubernetes ClusterRoleBinding if it does not exist",
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "description": "Name of Kubernetes ClusterRoleBinding",
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "image": {
+        "description": "Container image",
+        "properties": {
+          "repository": {
+            "description": "Container image repository",
+            "type": "string",
+            "default": "dollarshaveclub/thermite"
+          },
+          "pullPolicy": {
+            "description": "When kubelet should attempt to pull the specified image",
+            "type": "string",
+            "default": "IfNotPresent"
+          },
+          "tag": {
+            "description": "Container image tag",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "imagePullSecrets": {
+        "type": "array"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "fullnameOverride": {
+        "type": "string"
+      },
+      "serviceAccount": {
+        "description": "Kubernetes ServiceAccount",
+        "type": "object",
+        "properties": {
+          "create": {
+            "description": "Enables creation of Kubernetes ServiceAccount if it does not exist",
+            "type": "boolean",
+            "default": "false"
+          },
+          "annotations": {
+            "description": "Kubernetes annotations to attach to ServiceAccount",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name of Kubernetes ServiceAccount",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "Namespace of Kubernetes ServiceAccount",
+            "type": "string",
+            "default": "default"
+          }
+        }
+      },
+      "podAnnotations": {
+        "type": "object"
+      },
+      "podSecurityContext": {
+        "type": "object"
+      },
+      "securityContext": {
+        "type": "object"
+      },
+      "resources": {
+        "type": "object"
+      },
+      "nodeSelector": {
+        "type": "object"
+      },
+      "tolerations": {
+        "type": "array"
+      },
+      "affinity": {
+        "type": "object"
+      }
+    }
+  }

@@ -46,7 +46,6 @@ clusterRoleBinding:
 image:
   repository: dollarshaveclub/thermite
   pullPolicy: IfNotPresent
-  tag: "0.0.20"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -54,7 +53,6 @@ fullnameOverride: ""
 
 serviceAccount:
   create: false
-  annotations: {}
   name: ""
   namespace: "default"
 
