@@ -1,0 +1,17 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  helm status {{ .Release.Name }}
+  helm get all {{ .Release.Name }}
+
+Thermite will run according to the Cron schedule {{ .Values.schedule }} relative
+to the timezone of the kube-controller-manager.
+
+{{ if .Values.removeImages -}}
+Image removal is enabled.
+{{ else -}}
+Image removal is disabled. To enable it, set the removeImages parameter to true.
+{{ end }}
