@@ -32,8 +32,9 @@ dockers:
   -
     image_templates:
     - "dollarshaveclub/{{.ProjectName}}:{{.Tag}}"
-    - "dollarshaveclub/{{.ProjectName}}:v{{.Major}}"
-    - "dollarshaveclub/{{.ProjectName}}:v{{.Major}}.{{.Minor}}"
+    - "dollarshaveclub/{{.ProjectName}}:{{.Major}}"
+    - "dollarshaveclub/{{.ProjectName}}:{{.Major}}.{{.Minor}}"
+    - "dollarshaveclub/{{.ProjectName}}:{{.Major}}.{{.Minor}}.{{.Patch}}"
     - "dollarshaveclub/{{.ProjectName}}:latest"
     extra_files:
     - cmd/
