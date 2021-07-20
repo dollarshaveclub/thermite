@@ -31,7 +31,6 @@ brews:
 dockers:
   -
     image_templates:
-    - "dollarshaveclub/{{.ProjectName}}:{{.Tag}}"
     - "dollarshaveclub/{{.ProjectName}}:{{.Major}}"
     - "dollarshaveclub/{{.ProjectName}}:{{.Major}}.{{.Minor}}"
     - "dollarshaveclub/{{.ProjectName}}:{{.Major}}.{{.Minor}}.{{.Patch}}"
