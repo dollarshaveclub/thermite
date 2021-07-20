@@ -1,8 +1,8 @@
 Thermite
 ========
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/dollarshaveclub/thermite.svg)](https://pkg.go.dev/github.com/dollarshaveclub/thermite)
 [![CircleCI](https://circleci.com/gh/dollarshaveclub/thermite/tree/master.svg?style=svg)](https://circleci.com/gh/dollarshaveclub/thermite/tree/master)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dollarshaveclub/thermite.svg)](https://pkg.go.dev/github.com/dollarshaveclub/thermite)
 [![Helm](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/dollarshaveclub)](https://artifacthub.io/packages/helm/dollarshaveclub/thermite)
 
 ## Installation
