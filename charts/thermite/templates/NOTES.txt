@@ -45,7 +45,7 @@ The AWS secret access key will be configured based on the secret key
 {{- .awsSecretAccessKey -}}.
 {{- end -}}
 {{- end -}}
-{{- end -}}
+{{- end }}
 
 If an image is not deployed in the cluster, the image's repository is configured
 with a valid prune period, and the image was pushed longer ago than the
