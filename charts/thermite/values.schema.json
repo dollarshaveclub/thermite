@@ -16,7 +16,7 @@
       "schedule": {
         "description": "Schedule for running Thermite job in Cron format",
         "type": "string",
-        "default": "* 0 * * *"
+        "default": "0 0 * * *"
       },
       "removeImages": {
         "description": "Enables removal of eligible images from ECR",

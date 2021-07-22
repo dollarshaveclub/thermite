@@ -1,6 +1,6 @@
 awsRegion: "us-east-1"
 periodTagKey: "thermite:prune-period"
-schedule: "* 0 * * *"
+schedule: "0 0 * * *"
 removeImages: false
 immediateRun: false
 
