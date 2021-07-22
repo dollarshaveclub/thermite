@@ -7,42 +7,42 @@ To learn more about the release, try:
   helm status {{ .Release.Name }}
   helm get all {{ .Release.Name }}
 
-{{ if eq .Values.immediateRun true -}}
+{{- if eq .Values.immediateRun true -}}
 A job has been created to run immediately.
-{{- end -}}
+{{- end }}
 
 A job will also run periodically according to the Cron schedule {{ .Values.schedule }}.
 
 The job checks an Amazon Elastic Container Registry for images eligible for
 removal.
 
-{{ with .Values.vaultInjector -}}
+{{- with .Values.vaultInjector -}}
 {{- if .enabled -}}
 Jobs are configured to use Amazon Web Services credentials injected by a Vault
 Agent in the cluster stored in a secret named "{{ .name }}".
 
-{{ with .keys -}}
+{{- with .keys -}}
 The AWS access key ID will be configured based on the secret key
-{{- .awsAccessKeyID -}}.
+{{ .awsAccessKeyID }}.
 
 The AWS secret access key will be configured based on the secret key
-{{- .awsSecretAccessKey -}}.
+{{ .awsSecretAccessKey }}.
 {{- end -}}
 {{- end -}}
-{{- end -}}
+{{- end }}
 
-{{ with .Values.secret -}}
+{{- with .Values.secret -}}
 {{- if .enabled -}}
 Jobs are configured to use Amazon Web Services credentials injected by a
 Kubernetes secret in the cluster stored in a secret named "{{ .name }}". These
 credentials will override any credentials injected by a Vault Agent.
 
-{{ with .keys -}}
+{{- with .keys -}}
 The AWS access key ID will be configured based on the secret key
-{{- .awsAccessKeyID -}}.
+{{ .awsAccessKeyID }}.
 
 The AWS secret access key will be configured based on the secret key
-{{- .awsSecretAccessKey -}}.
+{{ .awsSecretAccessKey }}.
 {{- end -}}
 {{- end -}}
 {{- end }}
@@ -58,4 +58,4 @@ an unsigned integer number of days under the key "{{ .Values.periodTagKey }}".
 Eligible images are permanently removed.
 {{- else -}}
 Eligible images are logged but not removed.
-{{- end -}}
+{{- end }}
