@@ -297,13 +297,9 @@ func (gc *Client) PruneRepo(ctx context.Context, name string, until time.Time, e
 	if err != nil {
 		return nil, err
 	}
-	if batchDeleteImageErr != nil {
-		span.Finish(tracer.WithError(err))
-		return pruned, fmt.Errorf("error deleting images: %w", err)
-	}
 	pruned = deleted
 	if batchDeleteImageErr != nil {
-		span.Finish(tracer.WithError(err))
+		span.Finish(tracer.WithError(batchDeleteImageErr))
 		return pruned, fmt.Errorf("error deleting images: %w", err)
 	}
 	return pruned, nil
