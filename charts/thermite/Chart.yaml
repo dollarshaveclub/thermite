@@ -6,4 +6,4 @@ sources:
   - https://github.com/dollarshaveclub/thermite
 maintainers:
 type: application
-appVersion: 0.0.23
+appVersion: 0.0.27

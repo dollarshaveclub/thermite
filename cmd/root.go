@@ -130,7 +130,7 @@ func run(logger *log.Logger) (pruned []string, err error) {
 }
 
 var RootCmd = &cobra.Command{
-	Version: "0.0.23",
+	Version: "0.0.27",
 	Use:     "thermite",
 	Short:   "Remove old and undeployed Amazon Elastic Container Registry images",
 	Long: `Thermite removes old Amazon Elastic Container Registry images that are not
