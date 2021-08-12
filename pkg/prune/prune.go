@@ -280,27 +280,38 @@ func (gc *Client) PruneRepo(ctx context.Context, name string, until time.Time, e
 		}
 		return pruneableImageTags, nil
 	}
-	bdio, batchDeleteImageErr := gc.client.BatchDeleteImageWithContext(
-		ctx,
-		&ecr.BatchDeleteImageInput{
-			ImageIds:       pruneableImageIDs,
-			RepositoryName: repo.RepositoryName,
-		},
-	)
-	log.Printf(
-		"deleted %d images from Elastic Container Registry repository %s",
-		len(bdio.ImageIds),
-		name,
-	)
-	gc.statsd.Count("prune.prune_repo_deleted", int64(len(bdio.ImageIds)), nil, 1)
-	deleted, err := repoImageRefsFromURIAndImageIDs(ctx, *repo.RepositoryUri, bdio.ImageIds)
-	if err != nil {
-		return nil, err
-	}
-	pruned = deleted
-	if batchDeleteImageErr != nil {
-		span.Finish(tracer.WithError(batchDeleteImageErr))
-		return pruned, fmt.Errorf("error deleting images: %w", err)
+	pruned = make([]string, 0, len(pruneableImageIDs))
+	remaining := pruneableImageIDs
+	for len(remaining) > 0 {
+		batch := remaining
+		if len(batch) > 100 {
+			batch = batch[:100]
+		}
+		remaining = remaining[len(batch):]
+		bdio, batchDeleteImageErr := gc.client.BatchDeleteImageWithContext(
+			ctx,
+			&ecr.BatchDeleteImageInput{
+				ImageIds:       batch,
+				RepositoryName: repo.RepositoryName,
+			},
+		)
+		log.Printf(
+			"deleted %d images from Elastic Container Registry repository %s",
+			len(bdio.ImageIds),
+			name,
+		)
+		gc.statsd.Count("prune.prune_repo_deleted", int64(len(bdio.ImageIds)), nil, 1)
+		deletedImageRefs, err := repoImageRefsFromURIAndImageIDs(ctx, *repo.RepositoryUri, bdio.ImageIds)
+		if err != nil {
+			span.Finish(tracer.WithError(err))
+			return pruned, fmt.Errorf("error formatting deleted image names: %w", err)
+		}
+		pruned = append(pruned, deletedImageRefs...)
+		if batchDeleteImageErr != nil {
+			span.Finish(tracer.WithError(err))
+			return pruned, fmt.Errorf("error deleting images: %w", err)
+		}
+
 	}
 	return pruned, nil
 }
