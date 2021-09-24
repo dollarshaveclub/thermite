@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine3.14 AS build
+FROM golang:1.17-alpine3.14 AS build
 COPY . /go/src/github.com/dollarshaveclub/thermite/
 WORKDIR /go/src/github.com/dollarshaveclub/thermite/
 RUN CGO_ENABLED=0 go build -ldflags='-s -w' -o /bin/thermite
