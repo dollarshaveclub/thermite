@@ -290,6 +290,53 @@ func TestGarbageCollector_PruneAllRepos(t *testing.T) {
 			DeletedCount: 1,
 		},
 		{
+			Name: "ExcludeMostRecent",
+			Repositories: []*ecr.Repository{
+				{
+					RepositoryArn: aws.String(
+						"arn:aws:ecr:us-east-1:000123456789:repository/thermite",
+					),
+					RepositoryName: aws.String("thermite"),
+					RepositoryUri: aws.String(
+						"000123456789.dkr.ecr.us-east-1.amazonaws.com/thermite",
+					),
+				},
+			},
+			TagsByResourceARN: map[string][]*ecr.Tag{
+				"arn:aws:ecr:us-east-1:000123456789:repository/thermite": {
+					{
+						Key:   aws.String("thermite:prune-period"),
+						Value: aws.String("30"),
+					},
+				},
+			},
+			ImageDetailsByRepositoryName: map[string][]*ecr.ImageDetail{
+				"thermite": {
+					{
+						ImagePushedAt: aws.Time(until.Add(-(30*24 + 1) * time.Hour)),
+						ImageTags: []*string{
+							aws.String("0437aec133abca7f3d054a5be48dde8ed9b2af22"),
+						},
+					},
+					{
+						ImagePushedAt: aws.Time(until.Add(-(30*24 + 2) * time.Hour)),
+						ImageTags: []*string{
+							aws.String("878d0cb2b7e6f6017c096fa613b1b521b95325a6"),
+						},
+					},
+				},
+			},
+			Opts:  []Option{WithRemoveImages()},
+			Until: until,
+			Excluded: []string{
+				"000123456789.dkr.ecr.us-east-1.amazonaws.com/thermite:5379a3dcddb42eb007a68ea7990c643066263fb8",
+			},
+			Pruned: []string{
+				"000123456789.dkr.ecr.us-east-1.amazonaws.com/thermite:878d0cb2b7e6f6017c096fa613b1b521b95325a6",
+			},
+			DeletedCount: 1,
+		},
+		{
 			Name: "WithDryRun",
 			Repositories: []*ecr.Repository{
 				{

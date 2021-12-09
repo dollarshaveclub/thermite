@@ -202,9 +202,8 @@ func (gc *Client) PruneRepo(ctx context.Context, name string, until time.Time, e
 		period,
 		name,
 	)
-	whitelist := newWhitelist(excluded...)
-	pruneableImageIDs := []*ecr.ImageIdentifier{}
-	var pageErr error
+	imageDetails := make([]*ecr.ImageDetail, 0)
+	var mostRecentImageDetail *ecr.ImageDetail
 	if err := gc.client.DescribeImagesPagesWithContext(
 		ctx,
 		&ecr.DescribeImagesInput{
@@ -213,41 +212,13 @@ func (gc *Client) PruneRepo(ctx context.Context, name string, until time.Time, e
 		},
 		func(page *ecr.DescribeImagesOutput, lastPage bool) bool {
 			for _, imageDetail := range page.ImageDetails {
-				excluded := false
-				for _, imageTag := range imageDetail.ImageTags {
-					if imageTag == nil {
-						pageErr = fmt.Errorf(
-							"found unexpected nil image tag in Elastic Container Registry repository %s",
-							*repo.RepositoryUri,
-						)
-						return false
-					}
-					imageRef := fmt.Sprintf("%s:%s", *repo.RepositoryUri, *imageTag)
-					if whitelist.IsExcluded(imageRef) {
-						excluded = true
-						break
-					}
-				}
-				if excluded {
-					continue
-				}
-				if imageDetail.ImagePushedAt == nil {
-					pageErr = fmt.Errorf(
-						"found unexpected nil image pushed at time in Elastic Container Registry repository %s",
-						*repo.RepositoryUri,
-					)
-					return false
-				}
-				pushedAt := imageDetail.ImagePushedAt.UTC()
-				period := -time.Duration(period) * 24 * time.Hour
-				cutoff := until.UTC().Add(period)
-				if pushedAt.After(cutoff) {
-					continue
-				}
-				for _, imageTag := range imageDetail.ImageTags {
-					pruneableImageIDs = append(pruneableImageIDs, &ecr.ImageIdentifier{ImageTag: imageTag})
+				isFirst := mostRecentImageDetail == nil
+				isMostRecent := isFirst || imageDetail.ImagePushedAt.After(*mostRecentImageDetail.ImagePushedAt)
+				if isMostRecent {
+					mostRecentImageDetail = imageDetail
 				}
 			}
+			imageDetails = append(imageDetails, page.ImageDetails...)
 			return true
 		},
 	); err != nil {
@@ -258,9 +229,57 @@ func (gc *Client) PruneRepo(ctx context.Context, name string, until time.Time, e
 			err,
 		)
 	}
-	if pageErr != nil {
-		span.Finish(tracer.WithError(pageErr))
-		return pruned, pageErr
+	if mostRecentImageDetail != nil {
+		log.Println("*****")
+		mostRecentImageIDs := make([]*ecr.ImageIdentifier, 0, len(mostRecentImageDetail.ImageTags))
+		for _, imageTag := range mostRecentImageDetail.ImageTags {
+			imageID := &ecr.ImageIdentifier{ImageTag: imageTag}
+			mostRecentImageIDs = append(mostRecentImageIDs, imageID)
+		}
+		mostRecentImageRefs, err := repoImageRefsFromURIAndImageIDs(
+			ctx,
+			*repo.RepositoryUri,
+			mostRecentImageIDs,
+		)
+		if err != nil {
+			span.Finish(tracer.WithError(err))
+			return nil, err
+		}
+		excluded = append(excluded, mostRecentImageRefs...)
+	}
+	whitelist := newWhitelist(excluded...)
+	log.Println(whitelist)
+	pruneableImageIDs := make([]*ecr.ImageIdentifier, 0, len(imageDetails))
+excluded:
+	for _, imageDetail := range imageDetails {
+		if imageDetail.ImagePushedAt == nil {
+			span.Finish(tracer.WithError(err))
+			return nil, fmt.Errorf(
+				"found unexpected nil image pushed at time in Elastic Container Registry repository %s",
+				*repo.RepositoryUri,
+			)
+		}
+		pushedAt := imageDetail.ImagePushedAt.UTC()
+		cutoff := until.UTC().Add(-time.Duration(period) * 24 * time.Hour)
+		if pushedAt.After(cutoff) {
+			continue excluded
+		}
+		for _, imageTag := range imageDetail.ImageTags {
+			if imageTag == nil {
+				span.Finish(tracer.WithError(err))
+				return nil, fmt.Errorf(
+					"found unexpected nil image tag in Elastic Container Registry repository %s",
+					*repo.RepositoryUri,
+				)
+			}
+			imageRef := fmt.Sprintf("%s:%s", *repo.RepositoryUri, *imageTag)
+			if whitelist.IsExcluded(imageRef) {
+				continue excluded
+			}
+			log.Println(imageRef, "is prunable")
+			imageID := &ecr.ImageIdentifier{ImageTag: imageTag}
+			pruneableImageIDs = append(pruneableImageIDs, imageID)
+		}
 	}
 	log.Printf(
 		"found %d unique pruneable images for Elastic Container Registry repository %s",
