@@ -91,7 +91,7 @@ github.com/davecgh/go-spew/spew
 # github.com/evanphx/json-patch v4.11.0+incompatible
 ## explicit
 github.com/evanphx/json-patch
-# github.com/go-logr/logr v0.4.0 => github.com/go-logr/logr v0.4.0
+# github.com/go-logr/logr v0.4.0
 ## explicit; go 1.14
 github.com/go-logr/logr
 # github.com/gogo/protobuf v1.3.2
@@ -620,4 +620,3 @@ sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.2.0
 ## explicit; go 1.12
 sigs.k8s.io/yaml
-# github.com/go-logr/logr => github.com/go-logr/logr v0.4.0

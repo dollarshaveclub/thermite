@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.16
-    working_directory: /go/src/github.com/dollarshaveclub/thermite
+      - image: cimg/go:1.18
     steps:
       - checkout
       - run: go build -v ./...
@@ -12,8 +11,7 @@ jobs:
       branches:
         ignore: gh-pages
     docker:
-      - image: circleci/golang:1.16
-    working_directory: /go/src/github.com/dollarshaveclub/thermite
+      - image: cimg/go:1.18
     steps:
       - checkout
       - run: go fmt ./...

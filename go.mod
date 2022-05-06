@@ -1,8 +1,6 @@
 module github.com/dollarshaveclub/thermite
 
-go 1.17
-
-replace github.com/go-logr/logr => github.com/go-logr/logr v0.4.0 // indirect
+go 1.18
 
 require (
 	cloud.google.com/go v0.94.0 // indirect
